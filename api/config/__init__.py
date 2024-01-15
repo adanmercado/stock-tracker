@@ -1,5 +1,7 @@
 import os
 
+from fastapi import Request
+
 from sqlalchemy import create_engine
 from sqlalchemy.orm.session import sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
@@ -13,3 +15,6 @@ engine = create_engine(SQLALCHEMY_DATABASE_URI, echo=True)
 Session = sessionmaker(bind=engine)
 
 SqlAlchemyBaseModel = declarative_base()
+
+def db_session(request: Request):
+    return request.state.db
