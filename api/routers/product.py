@@ -33,3 +33,25 @@ def create_product(product: Product, db: Session = Depends(db_session)):
     db.refresh(new_product)
 
     return JSONResponse(status_code=201, content=jsonable_encoder(new_product))
+
+@product_router.put('/products/{barcode}', response_model=Product)
+def update_product(barcode: str, product: Product, db: Session = Depends(db_session)):
+    current_product = db.query(ProductModel).filter(ProductModel.barcode == barcode).first()
+    if not current_product:
+        raise HTTPException(status_code=404, detail='Product not found.')
+    
+    if product.barcode != current_product.barcode and db.query(ProductModel).filter(ProductModel.barcode == product.barcode).first():
+        raise HTTPException(status_code=409, detail=f'The barcode {product.barcode} is already assigned to another product.')
+    
+    current_product.barcode = product.barcode
+    current_product.description = product.description
+    current_product.price = product.price
+    current_product.min_stock = product.min_stock
+    current_product.max_stock = product.max_stock
+    current_product.current_stock = product.current_stock
+
+    db.add(current_product)
+    db.commit()
+    db.refresh(current_product)
+
+    return JSONResponse(status_code=200, content=jsonable_encoder(current_product))
