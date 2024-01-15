@@ -15,6 +15,13 @@ def get_products(db: Session = Depends(db_session)):
     data = db.query(ProductModel).order_by(ProductModel.description.asc()).all()
     return JSONResponse(status_code=200, content=jsonable_encoder(data))
 
+@product_router.get('/products/{barcode}', response_model=Product)
+def get_product(barcode: str, db: Session = Depends(db_session)):
+    product = db.query(ProductModel).filter(ProductModel.barcode == barcode).first()
+    if not product:
+        raise HTTPException(status_code=404, detail='Product not found.')
+    return JSONResponse(status_code=200, content=jsonable_encoder(product))
+
 @product_router.post('/products', response_model=Product)
 def create_product(product: Product, db: Session = Depends(db_session)):
     if db.query(ProductModel).filter(ProductModel.barcode == product.barcode).first():
