@@ -8,7 +8,7 @@ class ProductModel(SqlAlchemyBaseModel):
     id = Column(Integer, primary_key=True, autoincrement=True)
     barcode = Column(String, unique=True)
     description = Column(String)
-    price = Column(String)
+    price = Column(Float)
     min_stock = Column(Float)
     max_stock = Column(Float)
     current_stock = Column(Float)
