@@ -55,3 +55,14 @@ def update_product(barcode: str, product: Product, db: Session = Depends(db_sess
     db.refresh(current_product)
 
     return JSONResponse(status_code=200, content=jsonable_encoder(current_product))
+
+@product_router.delete('/products/{barcode}')
+def delete_product(barcode: str, db: Session = Depends(db_session)):
+    product = db.query(ProductModel).filter(ProductModel.barcode == barcode).first()
+    if not product:
+        raise HTTPException(status_code=404, detail='Product not found.')
+    
+    db.delete(product)
+    db.commit()
+
+    return JSONResponse(status_code=200, content={ 'Ok': True })
