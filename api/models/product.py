@@ -1,4 +1,5 @@
 from sqlalchemy import Column, Integer, String, Float
+from sqlalchemy.orm import relationship
 
 from api.config import SqlAlchemyBaseModel
 
@@ -12,3 +13,5 @@ class ProductModel(SqlAlchemyBaseModel):
     min_stock = Column(Float)
     max_stock = Column(Float)
     current_stock = Column(Float)
+
+    movements = relationship('StockMovementModel', back_populates='product')
