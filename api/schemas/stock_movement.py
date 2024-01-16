@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from pydantic import BaseModel, Field
 from typing import Optional
 
@@ -7,3 +9,4 @@ class StockMovement(BaseModel):
     last_stock: float = Field(default=0.0)
     new_stock: float = Field(default=0.0)
     comment: Optional[str] = Field(max_length=250)
+    modification_date: Optional[datetime] = datetime.now()

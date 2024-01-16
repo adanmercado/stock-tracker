@@ -1,4 +1,4 @@
-from sqlalchemy import Column, String, Float, Integer, ForeignKey
+from sqlalchemy import Column, String, Float, Integer, ForeignKey, DateTime
 from sqlalchemy.orm import relationship
 
 from api.config import SqlAlchemyBaseModel
@@ -14,3 +14,4 @@ class StockMovementModel(SqlAlchemyBaseModel):
     last_stock = Column(Float)
     new_stock = Column(Float)
     comment = Column(String)
+    modification_date = Column(DateTime)
